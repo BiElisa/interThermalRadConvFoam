@@ -1,0 +1,14 @@
+EXE_INC = \
+    -I.. \
+    -I$(WM_PROJECT_USER_DIR)/src/transportModels/incompressible/lnInclude \
+    -I$(WM_PROJECT_DIR)/src/transportModels/interfaceProperties/lnInclude \
+    -I$(WM_PROJECT_DIR)/src/transportModels/twoPhaseMixture/lnInclude \
+    -I$(LIB_SRC)/finiteVolume/lnInclude
+
+LIB_LIBS = \
+    -ltwoPhaseMixture \
+    -L$(FOAM_USER_LIBBIN) \
+    -laddTIncompressibleTransportModels \
+    -linterfaceProperties \
+    -ltwoPhaseProperties \
+    -lfiniteVolume

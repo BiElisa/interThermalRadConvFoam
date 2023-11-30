@@ -1,0 +1,9 @@
+EXE_INC = \
+    -I$(WM_PROJECT_USER_DIR)/src/transportModels/incompressible/lnInclude \
+    -I$(LIB_SRC)/transportModels/twoPhaseMixture/lnInclude \
+    -I$(LIB_SRC)/finiteVolume/lnInclude \
+    -I$(LIB_SRC)/meshTools/lnInclude
+
+LIB_LIBS = \
+    -ltwoPhaseMixture \
+    -lfiniteVolume
