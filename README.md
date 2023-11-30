@@ -20,7 +20,9 @@ temperature-dependent viscoplastic model is used for the final application
 to lava flows. 
 
 We present two test cases: 
+
 (1) a benchmark from literature based on a laboratory experiment [1,2] 
+
 (2) an application to a real lava flow by simulating the early hours of 
 the 23 November 2014 eruption of the Fogo volcano at Cape Verde, West 
 Africa [3,4]. 
