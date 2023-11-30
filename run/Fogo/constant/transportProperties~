@@ -1,0 +1,52 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v1812                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      transportProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+phases (fluid air);
+
+fluid
+{
+    transportModel    Newtonian; 
+    nu                [0 2 -1 0 0 0 0] 1e-6; // kinematic viscosity
+    rho               [1 -3 0 0 0 0 0] 1000;
+    cp                [0 2 -2 -1 0 0 0] 4190; // EB from article
+    Pr                [0 0 0 0 0 0 0] 10; // EB from article
+    // Prandtl = dynamic v. * specific heat / therm. conductivity
+ }
+
+air
+{
+    transportModel    Newtonian;
+    nu                [0 2 -1 0 0 0 0] 1.48e-05;
+    rho               [1 -3 0 0 0 0 0] 1;
+    cp                [0 2 -2 -1 0 0 0] 100; // EB add
+    Pr                [0 0 0 0 0 0 0] 1; // EB add
+}
+
+sigma                 0.0; //0.007;
+
+// EB : Radiative transport properties
+emissivity            [0 0 0 0 0 0 0]   0.96 ;
+sigma_SB              [1 0 -3 -4 0 0 0] 5.67e-8 ;
+fractionalAreaExposed [0 0 0 0 0 0 0]   1.0 ;
+T_env                 [0 0 0 1 0 0 0]  293.0 ;
+convectiveHeatTransferParameter  [1 0 -3 -1 0 0 0] 2; // between 1 and 3 (Article Garel et al. 2012)
+
+
+
+
+
+// ************************************************************************* //

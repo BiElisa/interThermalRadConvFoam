@@ -1,0 +1,64 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v1912                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      T;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 0 1 0 0 0]; // kg m s K mol A cd
+
+T_env   300; // ambient temperature (K)
+T_vent  1538; // eruption temperature (K)
+fluidDensity 2700;
+Pr   28750;
+cp    1150;
+
+internalField   uniform $T_env; 
+
+boundaryField
+{
+
+    terrain // conductive boundary condition
+    {
+        type            exprMixed; 
+        value           $internalField;
+        variables       "Tinf=$T_env; rho=$fluidDensity; cp=$cp; DT=1/$Pr; k=DT*rho*cp; L_wall=0.002; k_wall=2.0";
+        valueExpr       "Tinf";
+        fractionExpr    "1.0/(1.0 + ( k/(mag(pos())) * (L_wall/k_wall) ))";
+    }
+    
+    inletWall1
+    {
+        type            fixedValue;
+        value           uniform $T_vent;
+    }
+
+    inletWall2
+    {
+        type            fixedValue;
+        value           uniform $T_vent;
+	}
+
+    atmosphere
+    {
+        type            inletOutlet;
+        inletValue      $internalField; 
+        value           $internalField; 
+    }
+
+    defaultFaces
+    {
+        type            empty;
+    }
+}
+
+// ************************************************************************* //

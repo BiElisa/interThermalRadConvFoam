@@ -1,0 +1,110 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v1812                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+scale   0.01;
+
+// Entire domain, but restricted fo simulations till ~200 s
+/* x_min -4;
+x_max  4;
+y_min  0;
+y_max  1;//2.5;
+z_min -4;
+z_max  4; */
+
+// Domain restricted for a simulation of 632 s
+x_min -8;
+x_max  8;
+y_min  0;
+y_max  1;//2.5;  
+z_min -8;
+z_max  8;
+
+/*
+x_min -12;
+x_max  12;
+y_min   0;
+y_max   3;
+z_min -12;
+z_max  12; */
+
+
+vertices
+(
+    ( $x_min  $y_min  $z_min ) // 0  
+    ( $x_max  $y_min  $z_min ) // 1  
+    ( $x_max  $y_max  $z_min ) // 2  
+    ( $x_min  $y_max  $z_min ) // 3
+    ( $x_min  $y_min  $z_max ) // 4
+    ( $x_max  $y_min  $z_max ) // 5
+    ( $x_max  $y_max  $z_max ) // 6
+    ( $x_min  $y_max  $z_max ) // 7
+);
+
+/* EB: in this case (x,z) forms the horizontal plane while
+ * the y-axis is oriented against the gravitational force*/
+blocks
+(
+ //    hex (0 1 2 3 4 5 6 7) (16 2 16) simpleGrading (1 1 1) //4
+    hex (0 1 2 3 4 5 6 7) (32 2 32) simpleGrading (1 1 1) //8
+//    hex (0 1 2 3 4 5 6 7) (30 12 30) simpleGrading (1 1 1) //12
+//    hex (0 1 2 3 4 5 6 7) (60 24 60) simpleGrading (1 1 1) //12
+//  | EB: 
+//  | (0;1) gives the direction of the x-axis
+//  | (1;2) gives the direction of the y-axis
+   
+edges
+(
+);
+
+boundary
+(
+    lowerWall
+    {
+        type wall;
+        faces
+	  (
+            (0 1 5 4) // EB: clockwise order seen from the hex inside 
+        );
+    }
+    atmosphere
+    {
+        type patch;
+        faces
+        (
+            (0 4 7 3) //<--
+            (0 3 2 1) //<--
+            (1 2 6 5)
+            (4 5 6 7) 
+            (2 3 7 6)
+        );
+    }
+/*    symmetry
+    {
+		type symmetriyPlane;
+		faces
+		(
+            (0 4 7 3) 
+            (0 3 2 1)
+        );
+	}
+	*/
+);
+
+mergePatchPairs
+(
+);
+
+// ************************************************************************* //

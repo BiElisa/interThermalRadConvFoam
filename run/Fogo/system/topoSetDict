@@ -1,0 +1,108 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v1912                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      topoSetDict;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+actions
+(
+    {
+        name    cylinder1;
+        type    cellSet;
+        action  new;
+        source cylinderToCell;
+        sourceInfo
+	    {
+       	    p1       (4842 3325 2800); 
+       	    p2       (4842 3325 1000); 
+       	    radius   20.0; 
+    	}
+    }
+
+    {
+        name    inlet1;
+        type    faceSet;
+        action  new;
+        source  cellToFace;
+        sourceInfo
+        {
+            set     cylinder1;
+            option  all;
+        }
+    }
+
+    {
+        name inlet1;
+        type faceSet;
+        action subset;
+        source patchToFace;
+        sourceInfo
+        {
+            patch "terrain";
+        }
+    }
+
+    {
+        name cylinder1;
+        type cellSet;
+        action remove;
+    }
+
+    {
+        name    cylinder2;
+        type    cellSet;
+        action  new;
+        source cylinderToCell;
+        sourceInfo
+	    {
+       	    p1       (4640 3060 2800); 
+       	    p2       (4640 3060 1000);   
+       	    radius   20.0; 
+    	}
+    }
+
+    {
+        name    inlet2;
+        type    faceSet;
+        action  new;
+        source  cellToFace;
+        sourceInfo
+        {
+            set     cylinder2;
+            option  all;
+        }
+    }
+
+    {
+        name inlet2;
+        type faceSet;
+        action subset;
+        source patchToFace;
+        sourceInfo
+        {
+            patch "terrain";
+        }
+    }
+
+    {
+        name cylinder2;
+        type cellSet;
+        action remove;
+    }
+    
+    // EB: inspired by
+    // https://www.cfd-online.com/Forums/openfoam-pre-processing/198067-creating-circular-inlet-square-face.html    
+);
+
+// ************************************************************************* //

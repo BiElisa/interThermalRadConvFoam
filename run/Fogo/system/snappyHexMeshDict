@@ -1,0 +1,158 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.1.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      snappyHexMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+castellatedMesh true;
+snap            true;
+addLayers       true;
+
+geometry
+{
+    Fogo_topography.stl
+    {
+        type triSurfaceMesh;
+        name terrain;
+    }
+    
+    sphere1
+    {
+		type    searchableSphere; 
+		origin  (4842 3325 2000);
+		radius  60.0; 
+	}
+
+    sphere2
+    {
+		type    searchableSphere; 
+		origin  (4640 3060 1886);
+		radius  60.0; 
+	}
+
+};
+
+castellatedMeshControls
+{
+    maxLocalCells 10000000;
+    maxGlobalCells 40000000;
+    minRefinementCells 1;
+    maxLoadUnbalance 0.10;
+    nCellsBetweenLevels 4;
+
+    features ();
+
+    refinementSurfaces
+    {
+        terrain
+        {
+            level (4 4);
+        }
+    }
+    resolveFeatureAngle 40;
+
+    refinementRegions
+    { 
+        sphere1
+        {
+            mode inside;
+            levels  ((3 4));
+        } 
+
+        sphere2
+        {
+            mode inside;
+            levels  ((3 4));
+        } 
+        
+        terrain
+        {
+            mode distance;
+            levels ((4 0));
+        }
+    }
+
+    locationInMesh (4000 4000 2890);
+    allowFreeStandingZoneFaces true;
+}
+
+snapControls
+{
+    explicitFeatureSnap    true;
+    nSmoothPatch 4;
+    tolerance 4.0;
+    nSolveIter 30;
+    nRelaxIter 5;
+}
+
+addLayersControls
+{
+    relativeSizes true;
+
+    layers
+    {
+        "(terrain).*"
+        {
+            nSurfaceLayers 3;
+        }
+    }
+
+    expansionRatio 1.0;
+    finalLayerThickness 0.3;
+    minThickness 0.3;
+    nGrow 0;
+    featureAngle 60;
+    nRelaxIter 8;
+    nSmoothSurfaceNormals 1;
+    nSmoothNormals 3;
+    nSmoothThickness 10;
+    maxFaceThicknessRatio 0.5;
+    maxThicknessToMedialRatio 0.3;
+    minMedianAxisAngle 90;
+    nBufferCellsNoExtrude 0;
+    nLayerIter 50;
+}
+
+meshQualityControls
+{
+    maxNonOrtho 65;
+    maxBoundarySkewness 20;
+    maxInternalSkewness 4;
+    maxConcave 80;
+    minVol 1e-13;
+    minTetQuality 1e-30;
+    minArea -1;
+    minTwist 0.05;
+    minDeterminant 0.001;
+    minFaceWeight 0.05;
+    minVolRatio 0.01;
+    minTriangleTwist -1;
+    nSmoothScale 4;
+    errorReduction 0.75;
+}
+
+meshQualityControls
+{
+    #include "meshQualityDict"
+    nSmoothScale 4;
+    errorReduction 0.75;
+}
+
+debug 0;
+
+// Merge tolerance. Is fraction of overall bounding box of initial mesh.
+// Note: the write tolerance needs to be higher than this.
+mergeTolerance 1e-6;
+
+
+// ************************************************************************* //

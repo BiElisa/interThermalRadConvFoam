@@ -1,0 +1,61 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v1812                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      transportProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+phases (fluid air);
+
+fluid
+{
+    transportModel    tdepGiordano; 
+    nu                [0 2 -1 0 0 0 0] 3.7; // kinematic viscosity
+    rho               [1 -3 0 0 0 0 0] 2700;
+    cp                [0 2 -2 -1 0 0 0] 1150; // EB from article
+    Pr                [0 0 0 0 0 0 0] 28750; // EB from article
+    // Prandtl = dynamic v. * specific heat / therm. conductivity
+
+    tdepGiordanoCoeffs
+    {
+        A    A [0 0 0 0 0 0 0] -5.94;
+        B    B [0 0 0 1 0 0 0] 5500;
+        C    C [0 0 0 1 0 0 0] -610;
+        nuMin    nuMin [0 2 -1 0 0 0 0] 3.7; //0.0005;
+        nuMax    nuMax [0 2 -1 0 0 0 0] 100;
+    }
+}
+
+air
+{
+    transportModel    Newtonian;
+    nu                [0 2 -1 0 0 0 0] 1.48e-05;
+    rho               [1 -3 0 0 0 0 0] 1;
+    cp                [0 2 -2 -1 0 0 0] 100; // EB add
+    Pr                [0 0 0 0 0 0 0] 1; // EB add
+}
+
+sigma                 0.0; //0.007;
+
+// EB : Radiative transport properties
+emissivity            [0 0 0 0 0 0 0]   0.8 ;
+sigma_SB              [1 0 -3 -4 0 0 0] 5.67e-8 ;
+fractionalAreaExposed [0 0 0 0 0 0 0]   1 ;
+T_env                 [0 0 0 1 0 0 0]  300.0 ;
+convectiveHeatTransferParameter  [1 0 -3 -1 0 0 0] 70; // between 1 and 3 (Article Garel et al. 2012)
+
+
+
+
+
+// ************************************************************************* //

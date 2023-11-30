@@ -1,0 +1,29 @@
+#!/bin/sh
+cd "${0%/*}" || exit                                # Run from this directory
+. ${WM_PROJECT_DIR:?}/bin/tools/RunFunctions        # Tutorial run functions
+#------------------------------------------------------------------------------
+
+echo "Creating the mesh"
+runApplication blockMesh
+
+echo "Extracting surface features from stl file"
+runApplication surfaceFeatureExtract
+
+echo "Refining the grid"
+runApplication snappyHexMesh -overwrite
+#cp -r constant/polyMesh/ constant/polyMesh.snappyHexMesh
+
+echo "Creating the point source"
+runApplication topoSet
+#cp -r constant/polyMesh/ constant/polyMesh.topoSet
+runApplication createPatch -overwrite
+#cp -r constant/polyMesh/ constant/polyMesh.createPatch
+
+echo "Decomposing the domain"
+runApplication decomposePar
+
+echo "*************************"
+runApplication interThermalRadConvFoam
+
+echo "Reconstructing the domain"
+runApplication reconstructPar
