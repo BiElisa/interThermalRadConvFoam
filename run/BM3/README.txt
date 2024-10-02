@@ -1,12 +1,12 @@
 Axisymmetric cooling and spreading (BM3 from [1])
 ======================
 
-The first test simulates a hot viscous fluid injected into a horizontal 
-plane, which starts spreading and cooling in an axisymmetric fashion.
-For this test we consider a Newtonian fluid injected onto the plane from 
-a hole located on the lower wall.
-The fluid is modelled as a hot Newtonian fluid that exchanges heat flux with
-the ground through conduction and with the air through radiation and convection.
+Simulation of a hot, viscous fluid injected into a horizontal plane, where 
+it spreads and cools in an axisymmetric fashion.
+This test introduces a Newtonian fluid through an orifice of the lower wall. 
+Modelled as a hot Newtonian liquid, the fluid dissipates heat via conduction 
+with the plane and through radiation and convection with the surrounding air 
+at its free surface.
 
 This test refers to an analogue experiment reported in [2], denoted as C14, 
 where a hot silicone oil (Rhodorsil® 47V 5000 or 47V 12500, dyed red) is 
@@ -26,12 +26,12 @@ Execution SUMMARY:
 - The solver adopted for this test case in interThermalRadConvFoam, a new
 variation of the classic interFoam.
 - The presence of the dictionary dynamicMeshDict inside the "constant" folder
-produce the dynamic mesh refinement during the runtime. The refinement is 
+produces the dynamic mesh refinement during the runtime. The refinement is 
 performed at the interface between the two fluids, namely where the value of 
 alpha is between 0.01 and 0.09.
 
 ----------------------
-The code execution can be performed also in parallel:
+The code execution can also be performed in parallel:
 
 ./Allrun-parallel
 
