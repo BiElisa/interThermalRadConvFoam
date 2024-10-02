@@ -1,11 +1,12 @@
 Pico do Fogo erption 2014-2015 (Cape Verde) - real lava flow test case
 ======================
 
-This test case reproduces the early hours of the effusive eruption occurred 
-during the Pico do Fogo erption 2014-2015 (Cape Verde) [1,2]. This test case uses
-the real topography of Pico do Fogo and accounts for two vents as eruptive 
-sources. Lava is modelled as a fluid with a temperature dependent viscosity
-that exchanges heat flux with the ground through conduction and with the air 
+Simulation of the early hours of the effusive eruption occurred 
+at Pico do Fogo (Cape Verde) 2014-2015 [1,2]. 
+This test case uses the real topography of Pico do Fogo and accounts for 
+two vents as eruptive sources. 
+Lava is modelled as a fluid with a temperature dependent viscosity that 
+exchanges heat flux with the ground through conduction and with the air 
 through radiation and convection.
 
 Executing:
