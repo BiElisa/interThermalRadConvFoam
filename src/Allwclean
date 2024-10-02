@@ -1,0 +1,19 @@
+#!/bin/sh
+cd ${0%/*} || exit 1                        # Run from this directory
+
+#------------------------------------------------------------------------------
+
+# 1. Clean the directory transportModels/incompressible
+wclean transportModels/incompressible
+
+# 2. Clean the directory transportModels/addTRadConvImmiscibleIncompressibleTwoPhaseMixture
+wclean transportModels/addTRadConvImmiscibleIncompressibleTwoPhaseMixture
+
+# 3. Remove any libraries created in the platform directories
+rm -rf $FOAM_USER_LIBBIN/libaddTRadConvImmiscibleIncompressibleTwoPhaseMixture*
+rm -rf $FOAM_USER_LIBBIN/libaddTIncompressibleTransportModels*
+
+# Final message
+echo "Cleaning completed. Codebase restored to the state before compilation."
+
+#------------------------------------------------------------------------------
