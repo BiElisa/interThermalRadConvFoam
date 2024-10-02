@@ -2,10 +2,8 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2004-2010, 2017 OpenCFD Ltd.
+    \\  /    A nd           | Copyright (C) 2011 OpenFOAM Foundation
      \\/     M anipulation  |
--------------------------------------------------------------------------------
-                            | Copyright (C) 2011-2015 OpenFOAM Foundation
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -25,7 +23,7 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "Newtonian.H"
+#include "tdepGiordano.H"
 #include "addToRunTimeSelectionTable.H"
 #include "surfaceFields.H"
 
@@ -35,15 +33,49 @@ namespace Foam
 {
 namespace viscosityModels
 {
-    defineTypeNameAndDebug(Newtonian, 0);
-    addToRunTimeSelectionTable(viscosityModel, Newtonian, dictionary);
+    defineTypeNameAndDebug(tdepGiordano, 0);
+
+    addToRunTimeSelectionTable
+    (
+        viscosityModel,
+        tdepGiordano,
+        dictionary
+    );
 }
+}
+
+
+// * * * * * * * * * * * * Private Member Functions  * * * * * * * * * * * * //
+
+Foam::tmp<Foam::volScalarField>
+Foam::viscosityModels::tdepGiordano::calcNu() const
+{
+    
+    const volScalarField& T= U_.mesh().lookupObject<volScalarField>("T");
+    
+    return max
+    (
+        nuMin_,
+        min
+        (
+            nuMax_,
+            dimensionedScalar("n", dimensionSet(0,2,-1,0,0,0,0), 1.0)*(Foam::pow
+			(
+			10.0, 
+			A_ + B_/max
+			(
+				(T+C_),
+				dimensionedScalar("minT", dimensionSet(0,0,0,1,0,0,0), 100.0)
+			))
+			)/ 2700.0
+        )
+    );
 }
 
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::viscosityModels::Newtonian::Newtonian
+Foam::viscosityModels::tdepGiordano::tdepGiordano
 (
     const word& name,
     const dictionary& viscosityProperties,
@@ -52,7 +84,12 @@ Foam::viscosityModels::Newtonian::Newtonian
 )
 :
     viscosityModel(name, viscosityProperties, U, phi),
-    nu0_("nu", dimViscosity, viscosityProperties_),
+    tdepGiordanoCoeffs_(viscosityProperties.subDict(typeName + "Coeffs")),
+    A_(tdepGiordanoCoeffs_.lookup("A")),
+    B_(tdepGiordanoCoeffs_.lookup("B")),
+    C_(tdepGiordanoCoeffs_.lookup("C")),
+    nuMin_(tdepGiordanoCoeffs_.lookup("nuMin")),
+    nuMax_(tdepGiordanoCoeffs_.lookup("nuMax")),
     nu_
     (
         IOobject
@@ -61,25 +98,29 @@ Foam::viscosityModels::Newtonian::Newtonian
             U_.time().timeName(),
             U_.db(),
             IOobject::NO_READ,
-            IOobject::NO_WRITE
+            IOobject::AUTO_WRITE
         ),
-        U_.mesh(),
-        nu0_
+        calcNu()
     )
 {}
 
 
 // * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * * //
 
-bool Foam::viscosityModels::Newtonian::read
+bool Foam::viscosityModels::tdepGiordano::read
 (
     const dictionary& viscosityProperties
 )
 {
     viscosityModel::read(viscosityProperties);
 
-    viscosityProperties_.readEntry("nu", nu0_);
-    nu_ = nu0_;
+    tdepGiordanoCoeffs_ = viscosityProperties.subDict(typeName + "Coeffs");
+
+    tdepGiordanoCoeffs_.lookup("A") >> A_;
+    tdepGiordanoCoeffs_.lookup("B") >> B_;
+    tdepGiordanoCoeffs_.lookup("C") >> C_;
+    tdepGiordanoCoeffs_.lookup("nuMin") >> nuMin_;
+    tdepGiordanoCoeffs_.lookup("nuMax") >> nuMax_;
 
     return true;
 }
