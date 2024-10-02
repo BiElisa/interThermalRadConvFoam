@@ -2,10 +2,8 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2004-2010, 2017 OpenCFD Ltd.
+    \\  /    A nd           | Copyright (C) 2011 OpenFOAM Foundation
      \\/     M anipulation  |
--------------------------------------------------------------------------------
-                            | Copyright (C) 2011-2016 OpenFOAM Foundation
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -24,18 +22,18 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::viscosityModels::Newtonian
+    Foam::viscosityModels::tdepGiordano
 
 Description
-    An incompressible Newtonian viscosity model.
+     Standard power-law non-Newtonian viscosity model.
 
 SourceFiles
-    Newtonian.C
+    tdepGiordano.C
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef Newtonian_H
-#define Newtonian_H
+#ifndef tdeptdepGiordano_H
+#define tdeptdepGiordano_H
 
 #include "viscosityModel.H"
 #include "dimensionedScalar.H"
@@ -49,33 +47,42 @@ namespace viscosityModels
 {
 
 /*---------------------------------------------------------------------------*\
-                           Class Newtonian Declaration
+                           Class tdepGiordano Declaration
 \*---------------------------------------------------------------------------*/
 
-class Newtonian
+class tdepGiordano
 :
     public viscosityModel
 {
     // Private data
 
-        dimensionedScalar nu0_;
+        dictionary tdepGiordanoCoeffs_;
 
-
-public:
-
-    // Protected data
+        dimensionedScalar A_;
+        dimensionedScalar B_;
+        dimensionedScalar C_;
+        dimensionedScalar nuMin_;
+        dimensionedScalar nuMax_;
 
         volScalarField nu_;
 
 
+    // Private Member Functions
+
+        //- Calculate and return the laminar viscosity
+        tmp<volScalarField> calcNu() const;
+
+
+public:
+
     //- Runtime type information
-    TypeName("Newtonian");
+    TypeName("tdepGiordano");
 
 
     // Constructors
 
         //- Construct from components
-        Newtonian
+        tdepGiordano
         (
             const word& name,
             const dictionary& viscosityProperties,
@@ -85,30 +92,32 @@ public:
 
 
     //- Destructor
-    virtual ~Newtonian()
+    ~tdepGiordano()
     {}
 
 
     // Member Functions
 
         //- Return the laminar viscosity
-        virtual tmp<volScalarField> nu() const
+        tmp<volScalarField> nu() const
         {
             return nu_;
         }
 
         //- Return the laminar viscosity for patch
-        virtual tmp<scalarField> nu(const label patchi) const
+        tmp<scalarField> nu(const label patchi) const
         {
             return nu_.boundaryField()[patchi];
         }
 
-        //- Correct the laminar viscosity (not appropriate, viscosity constant)
-        virtual void correct()
-        {}
+        //- Correct the laminar viscosity
+        void correct()
+        {
+            nu_ = calcNu();
+        }
 
         //- Read transportProperties dictionary
-        virtual bool read(const dictionary& viscosityProperties);
+        bool read(const dictionary& viscosityProperties);
 };
 
 
