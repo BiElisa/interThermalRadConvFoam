@@ -1,0 +1,15 @@
+#!/bin/sh
+cd ${0%/*} || exit 1                        # Run from this directory
+
+#------------------------------------------------------------------------------
+
+# 1. Clean the directory solvers/multiphase/interThermalRadConvFoam
+wclean solvers/multiphase/interThermalRadConvFoam
+
+# 3. Remove any libraries created in the platform directories
+rm -rf $FOAM_USER_APPBIN/interThermalRadConvFoam
+
+# Final message
+echo "Cleaning completed. Codebase restored to the state before compilation."
+
+#------------------------------------------------------------------------------
