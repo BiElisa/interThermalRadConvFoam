@@ -3,18 +3,18 @@ A new OpenFOAM solver, called interThermalRadConvFoam, to simulate free-surface 
 
 -----------------------
 
-Welcome on this project related to OpenFoam development!
+Welcome to this project related to OpenFOAM development!
 We are glad to present a new OpenFOAM solver, called interThermalRadConvFoam, 
-to simulate free-surface viscous fluids with temperature changing due 
+to simulate free-surface viscous fluids with temperature changes due 
 to radiative, convective, and conductive heat exchanges and the application 
-of the solver to benchmark test case and a lava flow simulation on a real 
-topography. The solver is based on interFoam (available with OpenFoam) and 
+of the solver to a benchmark test case and a lava flow simulation on a real 
+topography. The solver is based on interFoam (available with OpenFOAM) and 
 thus on the Volume of Fluid (VoF) technique used to describe the multiphase 
 dynamics of two incompressible, viscous, and immiscible fluids (based on 
 the Interface Capturing strategy). In our model, the two fluids are the 
 fluid of interest with high viscosity and the surrounding atmosphere. 
 Being interested in temperature effects, we added to the mass and momentum 
-equations from interFoam an equation for energy that models the thermal 
+equations from interFoam, an equation for the energy that models the thermal 
 exchanges between the fluid and the environment. Furthermore, a 
 temperature-dependent viscoplastic model is used for the final application 
 to lava flows. 
