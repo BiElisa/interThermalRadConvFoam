@@ -1,0 +1,23 @@
+#!/bin/sh
+cd "${0%/*}" || exit                                # Run from this directory
+. ${WM_PROJECT_DIR:?}/bin/tools/RunFunctions        # Tutorial run functions
+#------------------------------------------------------------------------------
+
+echo "Creating the mesh"
+runApplication blockMesh
+
+echo "Refining the grid"
+runApplication snappyHexMesh -overwrite
+
+echo "Creating the point source"
+runApplication topoSet
+runApplication createPatch -overwrite
+
+echo "Decomposing the domain"
+runApplication decomposePar
+
+echo "*************************"
+runApplication interThermalRadConvFoam
+
+echo "Reconstructing the domain"
+runApplication reconstructPar
