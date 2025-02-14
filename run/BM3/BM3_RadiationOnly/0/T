@@ -1,0 +1,51 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v1912                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      T;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 0 1 0 0 0]; // kg m s K mol A cd
+
+T_env   293; // ambient temperature (K)
+T_vent  315; // eruption temperature (K)
+
+internalField   uniform $T_env; 
+
+boundaryField
+{
+
+    lowerWall 
+    {
+        type            zeroGradient; 
+    }
+    
+    inletWall
+    {
+        type            fixedValue;
+        value           uniform $T_vent;
+	}	
+    atmosphere
+    {
+       
+        type            inletOutlet;
+        inletValue      $internalField; 
+        value           $internalField; 
+    }
+
+    defaultFaces
+    {
+        type            empty;
+    }
+}
+
+// ************************************************************************* //
