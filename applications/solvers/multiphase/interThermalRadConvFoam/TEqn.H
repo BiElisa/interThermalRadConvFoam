@@ -1,6 +1,6 @@
 surfaceScalarField kappaf = mixture.kappaf();
 
-// EB: add Conv
+// EB: add 
 volScalarField NoInterface ( mixture.nearInterface() );
 forAll ( mesh.C(), celli )
 {
@@ -8,7 +8,7 @@ forAll ( mesh.C(), celli )
 	else  
 	    NoInterface[celli] = 1;
 }
-// End add Conv
+// End add 
 
 fvScalarMatrix TEqn
 (	
