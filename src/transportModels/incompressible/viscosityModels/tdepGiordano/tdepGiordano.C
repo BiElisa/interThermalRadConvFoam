@@ -67,7 +67,7 @@ Foam::viscosityModels::tdepGiordano::calcNu() const
 				(T+C_),
 				dimensionedScalar("minT", dimensionSet(0,0,0,1,0,0,0), 100.0)
 			))
-			)/ 2700.0
+			)/ rho_.value()
         )
     );
 }
@@ -90,6 +90,7 @@ Foam::viscosityModels::tdepGiordano::tdepGiordano
     C_(tdepGiordanoCoeffs_.lookup("C")),
     nuMin_(tdepGiordanoCoeffs_.lookup("nuMin")),
     nuMax_(tdepGiordanoCoeffs_.lookup("nuMax")),
+    rho_(tdepGiordanoCoeffs_.lookupOrDefault("rho", dimensionedScalar("rho", dimensionSet(1,-3,0,0,0,0,0), 2700.0))),
     nu_
     (
         IOobject
@@ -100,7 +101,7 @@ Foam::viscosityModels::tdepGiordano::tdepGiordano
             IOobject::NO_READ,
             IOobject::AUTO_WRITE
         ),
-        calcNu()
+        calcNu_()
     )
 {}
 
@@ -121,6 +122,7 @@ bool Foam::viscosityModels::tdepGiordano::read
     tdepGiordanoCoeffs_.lookup("C") >> C_;
     tdepGiordanoCoeffs_.lookup("nuMin") >> nuMin_;
     tdepGiordanoCoeffs_.lookup("nuMax") >> nuMax_;
+    rho_ = tdepGiordanoCoeffs_.lookupOrDefault("rho", dimensionedScalar("rho", dimensionSet(1,-3,0,0,0,0,0), 2700.0));
 
     return true;
 }
