@@ -86,10 +86,10 @@ volScalarField& RadiativeCoeff
     // Initialize the radiative coefficient epsilon 
     // (not exactly as the equation (8) from CostaM. 2005)
     // as 1 or 0 for on interface or not
-    volScalarField epsilonMatrix(nearInterface());
+    volScalarField Epsilon(nearInterface());
     // Initialize the field for the area of the interface surface
     // as 1 or 0 for on interface or not
-    volScalarField Afs(epsilonMatrix);
+    volScalarField Afs(Epsilon);
 
     // Estimate cell surface area as V^(2/3), to be calculated with isosurfaces
     // later
@@ -97,31 +97,31 @@ volScalarField& RadiativeCoeff
 		if ( Afs[cellI] > 0 )
     	    Afs[cellI] = pow(U.mesh().V()[cellI],0.67);
     }
-    forAll(epsilonMatrix.boundaryField(), patchI) {
-	    forAll(epsilonMatrix.boundaryField()[patchI], faceI ) {
-	        epsilonMatrix.boundaryFieldRef()[patchI][faceI] = scalar(0.0) ;
+    forAll(Epsilon.boundaryField(), patchI) {
+	    forAll(Epsilon.boundaryField()[patchI], faceI ) {
+	        Epsilon.boundaryFieldRef()[patchI][faceI] = scalar(0.0) ;
 	    }
     }
     // Calculate the volume fraction rate term
-    forAll(epsilonMatrix, cellI) {
+    forAll(Epsilon, cellI) {
 	    if((T[cellI] > T_env_.value())) {   
-	        epsilonMatrix[cellI] = emissivity_.value() * fractionalAreaExposed_.value()
+	        Epsilon[cellI] = emissivity_.value() * fractionalAreaExposed_.value()
 	                 * sigma_SB_.value() * Afs[cellI] / U.mesh().V()[cellI] ;
 	    }else{
-	        epsilonMatrix[cellI] = scalar(0.0) ; 
+	        Epsilon[cellI] = scalar(0.0) ; 
 	    }
     }
     
     dimensionedScalar dimCorr("dimCorr",dimMass/(pow4(dimTemperature)*pow3(dimTime)*dimLength),1);
-    RadiativeCoeff = epsilonMatrix * dimCorr ;
+    RadiativeCoeff = Epsilon * dimCorr ;
 /*    return(
-        epsilonMatrix * dimCorr * pow4(T_env_) 
-        - Foam::fvm::Sp( epsilonMatrix * dimCorr * pow3(T) , T)   
+        Epsilon * dimCorr * pow4(T_env_) 
+        - Foam::fvm::Sp( Epsilon * dimCorr * pow3(T) , T)   
     );  
 */    return(
-        epsilonMatrix * dimCorr * pow4(T_env_)
-        - Foam::fvm::Sp( 4 * epsilonMatrix * dimCorr * pow3(T) , T)
-        + epsilonMatrix * dimCorr * 3 * pow4(T) 
+        Epsilon * dimCorr * pow4(T_env_)
+        - Foam::fvm::Sp( 4 * Epsilon * dimCorr * pow3(T) , T)
+        + Epsilon * dimCorr * 3 * pow4(T) 
     ) ;    
 
 }
@@ -148,10 +148,10 @@ Foam::tmp<Foam::fvScalarMatrix> Foam::addTRadConvImmiscibleIncompressibleTwoPhas
 		Info << "calcSourceForcedConvection" << endl;
 		// Initialize the forced convective coefficient W 
 		// as 1 or 0 for on interface or not
-		volScalarField WMatrix(nearInterface());
+		volScalarField W(nearInterface());
 		// Initialize the field for the area of the interface surface
 		// as 1 or 0 for on interface or not
-		volScalarField Afs(WMatrix);
+		volScalarField Afs(W);
 
 		// Estimate cell surface area as V^(2/3), to be calculated with isosurfaces
 		// later
@@ -159,27 +159,27 @@ Foam::tmp<Foam::fvScalarMatrix> Foam::addTRadConvImmiscibleIncompressibleTwoPhas
 			if ( Afs[cellI] > 0 )
 				Afs[cellI] = pow(U.mesh().V()[cellI],0.67);
 		}
-		forAll(WMatrix.boundaryField(), patchI) {
-			forAll(WMatrix.boundaryField()[patchI], faceI ) {
-				WMatrix.boundaryFieldRef()[patchI][faceI] = scalar(0.0) ;
+		forAll(W.boundaryField(), patchI) {
+			forAll(W.boundaryField()[patchI], faceI ) {
+				W.boundaryFieldRef()[patchI][faceI] = scalar(0.0) ;
 			}
 		}
 		// Calculate the volume fraction rate term
-		forAll(WMatrix, cellI) {
+		forAll(W, cellI) {
 			if((T[cellI] > T_env_.value())) {   
-				WMatrix[cellI] = convectiveHeatTransferParameter_.value() * fractionalAreaExposed_.value()
+				W[cellI] = convectiveHeatTransferParameter_.value() * fractionalAreaExposed_.value()
 						  * Afs[cellI] / U.mesh().V()[cellI] ;
 			}else{
-				WMatrix[cellI] = scalar(0.0) ; 
+				W[cellI] = scalar(0.0) ; 
 			}
 		}
 		
 		dimensionedScalar dimCorr("dimCorr",dimMass/(dimTemperature*pow3(dimTime)*dimLength),1);
-	 //   ConvectiveCoeff = WMatrix * dimCorr ; 
+	 //   ConvectiveCoeff = W * dimCorr ; 
 	 /*  activate this in case you create the volScalarField ConvectiveCoeff to visualize it on ParaFoam */
 		return(
-			WMatrix * dimCorr * T_env_
-			- Foam::fvm::Sp( WMatrix * dimCorr , T)
+			W * dimCorr * T_env_
+			- Foam::fvm::Sp( W * dimCorr , T)
 		) ;    
 
 }
