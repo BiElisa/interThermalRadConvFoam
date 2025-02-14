@@ -63,6 +63,7 @@ class tdepGiordano
         dimensionedScalar C_;
         dimensionedScalar nuMin_;
         dimensionedScalar nuMax_;
+        dimensionedScalar rho_;
 
         volScalarField nu_;
 
@@ -70,7 +71,7 @@ class tdepGiordano
     // Private Member Functions
 
         //- Calculate and return the laminar viscosity
-        tmp<volScalarField> calcNu() const;
+        tmp<volScalarField> calcNu_() const;
 
 
 public:
@@ -113,7 +114,7 @@ public:
         //- Correct the laminar viscosity
         void correct()
         {
-            nu_ = calcNu();
+            nu_ = calcNu_();
         }
 
         //- Read transportProperties dictionary
