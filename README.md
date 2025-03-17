@@ -21,16 +21,16 @@ to lava flows.
 
 We present two test cases: 
 
-(1) a benchmark from literature based on a laboratory experiment [1,2] 
+- a benchmark from literature based on a laboratory experiment [1,2] 
 
-(2) an application to a real lava flow by simulating the early hours of 
+- an application to a real lava flow by simulating the early hours of 
 the 23 November 2014 eruption of the Fogo volcano at Cape Verde, West 
 Africa [3,4]. 
 
 For the simulation of the laboratory experiment, we also present simulations 
 executed using a dynamic mesh with adaptive refinement.
 
-![3D_for_the_cover_3.pdf](https://github.com/user-attachments/files/19287512/3D_for_the_cover_3.pdf)
+![3D_for_the_cover_3](https://github.com/user-attachments/assets/185230c8-7538-439c-a6d3-678f74e052ee)
 
 ## Installation
 1. Execute from inside the folder "src":
@@ -45,20 +45,16 @@ Alternatively, to install all at one time, execute from the main folder:
 
   ./Allwmake
 
-
 ## Run a test case
 Move inside the folder of the test case of interest and execute:
 
 ./Allrun
 
-
 ## Compatibility: 
 OpenFoam-v1912
 
-
 ## Who do I talk to? 
 Elisa Biagioli (elisa.biagioli@manchester.ac.uk or biagioli.elisa88@gmail.com)
-
 
 ## References:
 
