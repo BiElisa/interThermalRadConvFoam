@@ -30,8 +30,6 @@ Africa [3,4].
 For the simulation of the laboratory experiment, we also present simulations 
 executed using a dynamic mesh with adaptive refinement.
 
-----------------------
-
 Installation.
 -
  
@@ -58,7 +56,6 @@ Move inside the folder of the test case of interest and execute:
 Compatibility: OpenFoam-v1912
 -
 
-----------------------
 
 References:
 -
