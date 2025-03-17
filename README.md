@@ -31,7 +31,7 @@ For the simulation of the laboratory experiment, we also present simulations
 executed using a dynamic mesh with adaptive refinement.
 
 -----------------------
-Execution.
+Installation.
  
 (i) Execute from inside the folder "src":
 
@@ -41,6 +41,11 @@ Execution.
 
 ./Allwmake
 
+(*) Alternatively, to install all at one time, execute from the main folder:
+
+./Allwmake
+
+Compatibility: OpenFoam-v1912
 -----------------------
 Run a test case.
 
