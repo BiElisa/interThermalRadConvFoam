@@ -30,6 +30,8 @@ Africa [3,4].
 For the simulation of the laboratory experiment, we also present simulations 
 executed using a dynamic mesh with adaptive refinement.
 
+[3D_for_the_cover_3.pdf](https://github.com/user-attachments/files/19287512/3D_for_the_cover_3.pdf)
+
 ## Installation
 1. Execute from inside the folder "src":
 
@@ -39,7 +41,7 @@ executed using a dynamic mesh with adaptive refinement.
 
      ./Allwmake
 
-* Alternatively, to install all at one time, execute from the main folder:
+Alternatively, to install all at one time, execute from the main folder:
 
   ./Allwmake
 
