@@ -1,0 +1,16 @@
+#!/bin/sh
+cd ${0%/*} || exit 1   # Run from this directory
+
+. $WM_PROJECT_DIR/wmake/scripts/AllwmakeParseArguments
+
+# Compile src ------------------------------------------------------------------
+
+wmake -all $targetType src/transportModels/incompressible
+wmake libso $targetType src/transportModels/addTRadConvImmiscibleIncompressibleTwoPhaseMixture
+
+# Compile applications ---------------------------------------------------------
+
+wmake -all $targetType applications/solvers
+
+#-------------------------------------------------------------------------------
+
