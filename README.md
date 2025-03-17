@@ -30,8 +30,10 @@ Africa [3,4].
 For the simulation of the laboratory experiment, we also present simulations 
 executed using a dynamic mesh with adaptive refinement.
 
------------------------
+----------------------
+
 Installation.
+-
  
 (i) Execute from inside the folder "src":
 
@@ -45,17 +47,21 @@ Installation.
 
 ./Allwmake
 
-Compatibility: OpenFoam-v1912
------------------------
+
 Run a test case.
+-
 
 Move inside the folder of the test case of interest and execute:
 
 ./Allrun
 
------------------------
+Compatibility: OpenFoam-v1912
+-
+
+----------------------
 
 References:
+-
 
 [1] B. Cordonnier, E. Lev, and F. Garel, “Benchmarking lava-flow models,” 
 Geological Society, London, Special Publications, vol. 426, pp. 425–445, 2015.
